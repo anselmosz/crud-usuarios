@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const FormContainer = styled.div`
   display: flex;
-  align-itens: flex-end;
-  gap: 10;
+  align-items: flex-end;
+  gap: 10px;
   flex-wrap: wrap;
   background-color: #fff;
   padding: 20px;
