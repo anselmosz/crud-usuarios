@@ -8,7 +8,7 @@ import { getAllUsers } from "./services/users";
 
 const Container = styled.div`
   width: 100%;
-  max-width: 800px;
+  max-width: 1300px;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
