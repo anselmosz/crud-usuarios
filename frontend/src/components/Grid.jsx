@@ -2,6 +2,8 @@ import React from "react";
 // import axios from "axios";
 import styled from "styled-components";
 import { FaTrash, FaEdit } from "react-icons/fa"
+import { toast } from "react-toastify";
+import { deleteUser } from "../services/users";
 
 const Table = styled.table`
   width: 100%;
@@ -38,11 +40,22 @@ export const Td = styled.td`
   }
 `;
 
+async function handleDelete(id) {
+  try {
+    await deleteUser(id);
+    toast.success("Usuário excluído");
+  }
+  catch (error) {
+    toast.error("erro ao excluir usuário")
+  }
+}
+
 function Grid({ users }) {
   return(
     <Table>
       <Thead>
         <Tr>
+          <Th>ID</Th>
           <Th>Nome</Th>
           <Th>Email</Th>
           <Th onlyWeb>Senha</Th>
@@ -52,7 +65,8 @@ function Grid({ users }) {
       </Thead>
       <Tbody>
         {users.map((user) => (
-          <Tr key={user.id}>
+          <Tr key={user.idUsuario}>
+            <Td>{user.idUsuario}</Td>
             <Td>{user.nome}</Td>
             <Td>{user.email}</Td>
             <Td onlyWeb>{user.senha}</Td>
@@ -62,7 +76,7 @@ function Grid({ users }) {
             </Td>
 
             <Td alignCenter width="5%">
-              <FaTrash/>
+              <FaTrash onClick={()=> handleDelete(user.idUsuario)}/>
             </Td>
           </Tr>
         ))}

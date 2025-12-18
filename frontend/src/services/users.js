@@ -10,6 +10,15 @@ export const getUserById = async (id) => {
   return response.data
 };
 
+export const createUser = async (dados) => {
+  const response = await api.post("/usuarios/", dados);
+  return response;
+}
+
+export const deleteUser = async (id) => {
+  await api.delete(`/usuarios/${id}`);
+}
+
 // export const createUser = (dados) => api.post("/usuarios", dados);
 
 // export const updateUser = (id, dados) => api.post(`/usuarios/${id}`, dados);

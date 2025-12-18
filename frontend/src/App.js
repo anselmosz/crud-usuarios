@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import GlobalStyle from "./styles/Global";
 import Form from "./components/Form";
-// import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Grid from "./components/Grid";
 import { useState, useEffect } from "react";
 import { getAllUsers } from "./services/users";
@@ -22,6 +22,8 @@ function App() {
   const [users, setUsers] = useState([]);
   // const [onEdit, setOnEdit] = useState(null);
 
+  // const notification = toast("teste")
+
   const loadUserData = async () => {
     const data = await getAllUsers();
     setUsers(data);
@@ -39,7 +41,7 @@ function App() {
         <Grid users={users}/>
       </Container>
 
-      {/* <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} /> */}
+      <ToastContainer position="bottom-right" />
       <GlobalStyle/>
     </>
   )

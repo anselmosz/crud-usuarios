@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { createUser } from "../services/users";
 import styled from "styled-components";
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   align-items: flex-end;
   gap: 10px;
@@ -37,26 +39,63 @@ const Button = styled.button`
   height: 42px;
 `;
 
-const Form = ({ onEdit }) => {
-  const ref = useRef();
+const Form = () => {
+  const [form, setForm] = useState({
+    nome: "",
+    email: "",
+    senha: "",
+  });
+
+  function handleChange(e) {
+    const {name, value} = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  async function handleSubmit(e) {
+  e.preventDefault();
+
+  try {
+    await createUser(form);
+    toast.success("Usuário criado");
+    setForm({nome: "", email: "", senha: ""})
+  }
+  catch (error) {
+    toast.error("Falha ao criar usuário")
+  }
+}
+
   return (
-    <FormContainer ref={ref}>
+    <FormContainer onSubmit={handleSubmit}>
       <InputArea>
         <Label>Nome</Label>
-        <Input name="nome"/>
+        <Input 
+          name="nome"
+          value={form.nome}
+          onChange={handleChange}/>
       </InputArea>
 
       <InputArea>
         <Label>Email</Label>
-        <Input name="email" type="email"/>
+        <Input 
+          name="email"
+          value={form.email}
+          onChange={handleChange}/>
       </InputArea>
 
       <InputArea>
         <Label>Senha</Label>
-        <Input name="senha" type="password"/>
+        <Input 
+          name="senha"
+          value={form.senha}
+          onChange={handleChange}/>
       </InputArea>
 
       <Button type="submit">Salvar</Button>
+      {/* <ToastContainer/> */}
     </FormContainer>
   );
 }
