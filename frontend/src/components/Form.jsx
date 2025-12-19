@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { createUser } from "../services/users";
+import { createUser, updateUser } from "../services/users";
 import styled from "styled-components";
 
 const FormContainer = styled.form`
@@ -27,10 +27,14 @@ const Input = styled.input`
   height: 40px;  
 `;
 
-const Label = styled.label``;
+const Label = styled.label`
+  margin-bottom: 6px;
+`;
 
 const Button = styled.button`
-  padding: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
   border: none;
@@ -39,34 +43,70 @@ const Button = styled.button`
   height: 42px;
 `;
 
-const Form = () => {
+const Form = ({ onEdit, setOnEdit, getUsers, }) => {
   const [form, setForm] = useState({
+    id: null,
     nome: "",
     email: "",
     senha: "",
   });
+
+  useEffect(() => {
+    if (onEdit) {
+      setForm({
+          idUsuario: onEdit.idUsuario,
+          nome: onEdit.nome,
+          email: onEdit.email,
+          senha: onEdit.senha
+      })
+    }
+  }, [onEdit])
 
   function handleChange(e) {
     const {name, value} = e.target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value
     }))
   }
 
   async function handleSubmit(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    await createUser(form);
-    toast.success("Usuário criado");
-    setForm({nome: "", email: "", senha: ""})
+    try {
+      if (form.idUsuario) {
+        await updateUser(form.idUsuario, {
+          nome: form.nome,
+          email: form.email,
+          senha: form.senha 
+        })
+        toast.success("Usuário editado")
+        setForm({nome: "", email: "", senha: ""})
+      } 
+      else {
+        if (!form.email || !form.nome || !form.senha) {
+          toast.warning("Falta preencher outros campos")
+        }
+        else {
+          try {
+            await createUser(form)
+            toast.success("Usuário criado com sucesso")
+            setForm({nome: "", email: "", senha: ""})
+          }
+          catch {
+            toast.error("Falha ao salvar usuário") 
+          }
+        }
+      }
+    } 
+    catch {
+      toast.error("Falha ao editar")
+    } 
+    
+    setOnEdit(null)
+    getUsers()
   }
-  catch (error) {
-    toast.error("Falha ao criar usuário")
-  }
-}
 
   return (
     <FormContainer onSubmit={handleSubmit}>
@@ -83,6 +123,7 @@ const Form = () => {
         <Input 
           name="email"
           value={form.email}
+          type="email"
           onChange={handleChange}/>
       </InputArea>
 
@@ -95,7 +136,6 @@ const Form = () => {
       </InputArea>
 
       <Button type="submit">Salvar</Button>
-      {/* <ToastContainer/> */}
     </FormContainer>
   );
 }

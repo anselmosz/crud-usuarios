@@ -40,17 +40,25 @@ export const Td = styled.td`
   }
 `;
 
-async function handleDelete(id) {
-  try {
-    await deleteUser(id);
-    toast.success("Usuário excluído");
-  }
-  catch (error) {
-    toast.error("erro ao excluir usuário")
-  }
-}
 
-function Grid({ users }) {
+function Grid({ users, setOnEdit, setUsers }) {
+  function handleEdit(user) {
+    setOnEdit(user)
+  }
+  
+  async function handleDelete(id) {
+    try {
+      await deleteUser(id)
+      const newUsers = users.filter((user) => user.idUsuario !== id)
+      setUsers(newUsers)
+      toast.success("Usuário excluído");
+    }
+    catch{
+      toast.error("erro ao excluir usuário")
+    }
+    setOnEdit(null)
+  }
+
   return(
     <Table>
       <Thead>
@@ -72,7 +80,7 @@ function Grid({ users }) {
             <Td onlyWeb>{user.senha}</Td>
 
             <Td alignCenter width="5%">
-              <FaEdit/>
+              <FaEdit onClick={()=> handleEdit(user)}/>
             </Td>
 
             <Td alignCenter width="5%">

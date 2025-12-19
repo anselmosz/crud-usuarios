@@ -20,7 +20,7 @@ module.exports = {
   createUser: async(req, res) => {
     const { nome, email, senha } = req.body;
 
-    if (!nome && !email && !senha) return res.status(400).json({message: "Dados obrigatórios faltando"});
+    if (!nome || !email || !senha) return res.status(400).json({message: "Dados obrigatórios faltando"});
 
     const dados = {
       nome,

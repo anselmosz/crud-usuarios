@@ -11,14 +11,18 @@ export const getUserById = async (id) => {
 };
 
 export const createUser = async (dados) => {
-  const response = await api.post("/usuarios/", dados);
-  return response;
+  // const response = 
+  await api.post("/usuarios/", dados);
+  // return response;
+}
+
+export const updateUser = async (id, dados) => {
+  // const response = 
+  await api.put(`/usuarios/${id}`, dados);
+  // return response;
 }
 
 export const deleteUser = async (id) => {
   await api.delete(`/usuarios/${id}`);
 }
-
 // export const createUser = (dados) => api.post("/usuarios", dados);
-
-// export const updateUser = (id, dados) => api.post(`/usuarios/${id}`, dados);

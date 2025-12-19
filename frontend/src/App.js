@@ -8,7 +8,6 @@ import { getAllUsers } from "./services/users";
 
 const Container = styled.div`
   width: 100%;
-  max-width: 1300px;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -16,11 +15,13 @@ const Container = styled.div`
   gap: 10px;
 `;
 
-const Title = styled.h2``;
+const Title = styled.h2`
+  margin: 20px 0px;
+`;
 
 function App() {
   const [users, setUsers] = useState([]);
-  // const [onEdit, setOnEdit] = useState(null);
+  const [onEdit, setOnEdit] = useState(null);
 
   // const notification = toast("teste")
 
@@ -31,14 +32,14 @@ function App() {
 
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, [setUsers]);
 
   return (
     <>
       <Container>
         <Title>Usuários</Title>
-        <Form/>
-        <Grid users={users}/>
+        <Form onEdit={onEdit} setOnEdit={setOnEdit} getUsers={loadUserData}/>
+        <Grid users={users} setOnEdit={setOnEdit} setUsers={setUsers}/>
       </Container>
 
       <ToastContainer position="bottom-right" />
