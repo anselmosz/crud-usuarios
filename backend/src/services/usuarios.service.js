@@ -1,8 +1,9 @@
-const knex = require("knex");
-const knexfile = require("../../knexfile")
+import knex from 'knex';
+import knexfile from '../../knexfile.js';
+
 const conexaoDB = knex(knexfile);
 
-module.exports = {
+export default {
   listarUsuarios: async () => {
     const usuarios = await conexaoDB("tbusuarios");
     return usuarios;
